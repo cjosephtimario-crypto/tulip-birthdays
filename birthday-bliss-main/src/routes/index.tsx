@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { TulipBorder, Tulip, TulipCorner } from "@/components/Tulips";
 import { Button } from "@/components/ui/button";
 import tulipsArt from "@/assets/tulips.png";
+import tulipHero from "/tulip-hero.jpg";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -36,7 +37,7 @@ function Home() {
   return (
     <div 
       className="min-h-screen relative overflow-hidden bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: `url('/tulip-hero.jpg')` }}
+      style={{ backgroundImage: `url(${tulipHero})` }}
     >
       {/* Soft cozy overlay for text contrast */}
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] pointer-events-none"></div>
