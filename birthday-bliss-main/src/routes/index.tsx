@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Shield, Sparkles, Bell, Clock, UserPlus } from "lucide-react";
+import { Shield, Sparkles, Bell, Clock, UserPlus, ArrowRight, LayoutDashboard } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TulipBorder, Tulip, TulipCorner } from "@/components/Tulips";
+import { TulipBorder, TulipCorner } from "@/components/Tulips";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase"; // Adjust import to match your supabase client path if needed
 import tulipsArt from "@/assets/tulips.png";
 import tulipHero from "@/assets/tulip-hero.jpg";
 
@@ -34,6 +36,27 @@ const steps = [
 ];
 
 function Home() {
+  const [session, setSession] = useState<any>(null);
+  const [loadingSession, setLoadingSession] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoadingSession(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setLoadingSession(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const userDisplayName = session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || "Friend";
+
   return (
     <div className="min-h-screen relative bg-purple-50/30">
       <div className="relative z-30">
@@ -63,18 +86,36 @@ function Home() {
             </div>
 
             <h1 className="font-display text-4xl font-extrabold sm:text-6xl tracking-tight text-slate-900 dark:text-white">
-              Never forget a special <span className="text-gradient">birthday</span> again
+              {session ? (
+                <span>Welcome back, <span className="text-gradient">{userDisplayName}</span>!</span>
+              ) : (
+                <span>Never forget a special <span className="text-gradient">birthday</span> again</span>
+              )}
             </h1>
+
             <p className="text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
-              Tulip Birthdays keeps a live countdown to your big day, wakes you up with a calm morning reminder, and cheers you on with a sweet little companion surrounded by flowers.
+              {session
+                ? "Your countdown is active and running. Head straight to your dashboard to check your countdown status and wishlist."
+                : "Tulip Birthdays keeps a live countdown to your big day, wakes you up with a calm morning reminder, and cheers you on with a sweet little companion surrounded by flowers."}
             </p>
+
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-              <Button asChild size="lg" className="rounded-full px-8 py-3 gradient-dream text-white font-bold shadow-lg hover:scale-105 transition-transform">
-                <Link to="/auth">Get started free</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-full px-8 py-3 border-purple-200 hover:bg-purple-50 bg-white/80">
-                <Link to="/about">Our story</Link>
-              </Button>
+              {!loadingSession && session ? (
+                <Button asChild size="lg" className="rounded-full px-8 py-3 gradient-dream text-white font-bold shadow-lg hover:scale-105 transition-transform">
+                  <Link to="/dashboard" className="flex items-center gap-2">
+                    <LayoutDashboard className="w-4 h-4" /> Go to Dashboard
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button asChild size="lg" className="rounded-full px-8 py-3 gradient-dream text-white font-bold shadow-lg hover:scale-105 transition-transform">
+                    <Link to="/auth">Get started free</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 py-3 border-purple-200 hover:bg-purple-50 bg-white/80">
+                    <Link to="/about">Our story</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
@@ -120,17 +161,19 @@ function Home() {
         <TulipBorder className="my-8" />
 
         {/* Bottom Call to Action */}
-        <section className="mx-auto max-w-3xl text-center card-cute p-10 sm:p-14 space-y-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md relative overflow-hidden shadow-xl border border-purple-100">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Ready for your countdown?</h2>
-          <p className="text-slate-700 dark:text-slate-200 max-w-md mx-auto font-medium">
-            It takes less than a minute. Your birthday, your data, your celebration.
-          </p>
-          <div className="pt-2">
-            <Button asChild size="lg" className="rounded-full px-10 py-3 gradient-dream text-white font-bold shadow-lg hover:scale-105 transition-transform">
-              <Link to="/auth">Start your countdown</Link>
-            </Button>
-          </div>
-        </section>
+        {!session && (
+          <section className="mx-auto max-w-3xl text-center card-cute p-10 sm:p-14 space-y-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md relative overflow-hidden shadow-xl border border-purple-100">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Ready for your countdown?</h2>
+            <p className="text-slate-700 dark:text-slate-200 max-w-md mx-auto font-medium">
+              It takes less than a minute. Your birthday, your data, your celebration.
+            </p>
+            <div className="pt-2">
+              <Button asChild size="lg" className="rounded-full px-10 py-3 gradient-dream text-white font-bold shadow-lg hover:scale-105 transition-transform">
+                <Link to="/auth">Start your countdown</Link>
+              </Button>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
