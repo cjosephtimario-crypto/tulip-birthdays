@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { TulipBorder, Tulip, TulipCorner } from "@/components/Tulips";
 import { Button } from "@/components/ui/button";
 import tulipsArt from "@/assets/tulips.png";
-import tulipHero from "/tulip-hero.jpg";
+import tulipHero from "@/assets/tulip-hero.jpg";
 
 export const Route = createFileRoute("/")({
   component: Home,
