@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Shield, Sparkles, Bell, Clock, UserPlus, ArrowRight, LayoutDashboard } from "lucide-react";
+import { Shield, Sparkles, Bell, Clock, UserPlus, LayoutDashboard } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TulipBorder, TulipCorner } from "@/components/Tulips";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase"; // Adjust import to match your supabase client path if needed
+import { supabase } from "@/lib/supabase";
 import tulipsArt from "@/assets/tulips.png";
 import tulipHero from "@/assets/tulip-hero.jpg";
 
@@ -72,15 +72,15 @@ function Home() {
             alt="Tulip hero background"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]"></div>
+          <div className="absolute inset-0 bg-black/25 backdrop-blur-[1px]"></div>
         </div>
 
         <TulipCorner className="top-16 left-10 -rotate-12 z-20" />
         <TulipCorner className="top-24 right-16 rotate-12 z-20" />
 
         <div className="relative z-20 mx-auto max-w-6xl px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-          <div className="space-y-6 text-center lg:text-left bg-white/70 dark:bg-slate-900/70 backdrop-blur-md p-6 sm:p-8 rounded-3xl shadow-2xl border border-white/60">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50/90 border border-purple-100 text-xs text-purple-700 font-medium mx-auto lg:mx-0 shadow-sm">
+          <div className="space-y-6 text-center lg:text-left bg-white/60 dark:bg-slate-900/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl shadow-2xl border border-white/50">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50/80 border border-purple-100 text-xs text-purple-700 font-medium mx-auto lg:mx-0 shadow-sm">
               <Shield className="w-3.5 h-3.5" />
               <span>Protected by encrypted accounts and row-level security</span>
             </div>
@@ -111,7 +111,7 @@ function Home() {
                   <Button asChild size="lg" className="rounded-full px-8 py-3 gradient-dream text-white font-bold shadow-lg hover:scale-105 transition-transform">
                     <Link to="/auth">Get started free</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 py-3 border-purple-200 hover:bg-purple-50 bg-white/80">
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 py-3 border-purple-200 hover:bg-purple-50 bg-white/70">
                     <Link to="/about">Our story</Link>
                   </Button>
                 </>
@@ -120,7 +120,7 @@ function Home() {
           </div>
 
           <div className="relative hidden lg:flex justify-center">
-            <div className="card-cute p-6 sm:p-8 w-full max-w-md relative bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/60 shadow-2xl">
+            <div className="card-cute p-6 sm:p-8 w-full max-w-md relative bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/50 shadow-2xl">
               <img
                 src={tulipsArt}
                 alt="Illustrated bouquet of pastel blue and purple tulips"
@@ -135,10 +135,10 @@ function Home() {
       </section>
 
       {/* Main content container that climbs up / scrolls over the pinned hero image */}
-      <main className="relative z-20 bg-purple-50/95 dark:bg-slate-950 rounded-t-[2.5rem] shadow-[0_-20px_40px_rgba(0,0,0,0.15)] px-4 py-16 sm:py-24 space-y-20 border-t border-white/50">
+      <main className="relative z-20 bg-purple-50/90 dark:bg-slate-950 rounded-t-[2.5rem] shadow-[0_-20px_40px_rgba(0,0,0,0.15)] px-4 py-16 sm:py-24 space-y-20 border-t border-white/50">
         {/* How It Works Section */}
         <section className="mx-auto max-w-6xl space-y-12">
-          <div className="text-center space-y-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md py-6 px-4 rounded-3xl max-w-2xl mx-auto shadow-md border border-purple-100">
+          <div className="text-center space-y-3 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md py-6 px-4 rounded-3xl max-w-2xl mx-auto shadow-md border border-purple-100">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">How it works</h2>
             <p className="text-slate-700 dark:text-slate-200 max-w-xl mx-auto font-medium">
               Four gentle steps to read through before you sign up, so you always know what to expect.
@@ -147,8 +147,8 @@ function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {steps.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="card-cute p-8 space-y-4 relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-lg border border-purple-100">
-                <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600">
+              <div key={title} className="card-cute p-8 space-y-4 relative overflow-hidden bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-lg border border-purple-100">
+                <div className="w-12 h-12 rounded-2xl bg-purple-100/80 flex items-center justify-center text-purple-600">
                   <Icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h3>
@@ -162,7 +162,7 @@ function Home() {
 
         {/* Bottom Call to Action */}
         {!session && (
-          <section className="mx-auto max-w-3xl text-center card-cute p-10 sm:p-14 space-y-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md relative overflow-hidden shadow-xl border border-purple-100">
+          <section className="mx-auto max-w-3xl text-center card-cute p-10 sm:p-14 space-y-6 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md relative overflow-hidden shadow-xl border border-purple-100">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Ready for your countdown?</h2>
             <p className="text-slate-700 dark:text-slate-200 max-w-md mx-auto font-medium">
               It takes less than a minute. Your birthday, your data, your celebration.

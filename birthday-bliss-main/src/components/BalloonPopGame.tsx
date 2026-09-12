@@ -34,6 +34,30 @@ const BALLOON_SIZES: { class: string }[] = [
   { class: 'w-10 h-14 text-[10px]' }, // Small
 ]
 
+// Synthesized snappy pop sound using Web Audio API
+const playPopSound = () => {
+  try {
+    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const osc = audioCtx.createOscillator()
+    const gain = audioCtx.createGain()
+
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(450, audioCtx.currentTime)
+    osc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.08)
+
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08)
+
+    osc.connect(gain)
+    gain.connect(audioCtx.destination)
+
+    osc.start()
+    osc.stop(audioCtx.currentTime + 0.08)
+  } catch (e) {
+    // Fallback if browser blocks audio prior to interaction
+  }
+}
+
 export function BalloonPopGame() {
   const [gameState, setGameState] = useState<'menu' | 'playing' | 'gameover'>('menu')
   const [mode, setMode] = useState<GameMode>('normal')
@@ -47,6 +71,13 @@ export function BalloonPopGame() {
     normal: [],
     hard: [],
   })
+
+  // Store personal peak scores locally for instant lookup
+  const [personalScores, setPersonalScores] = useState<Record<GameMode, number>>({
+    easy: 0,
+    normal: 0,
+    hard: 0,
+  })
   
   const [isNewRecord, setIsNewRecord] = useState<boolean>(false)
   const [lastPopFeedback, setLastPopFeedback] = useState<{ id: number; text: string; points: number } | null>(null)
@@ -54,6 +85,13 @@ export function BalloonPopGame() {
   useEffect(() => {
     const savedName = localStorage.getItem('tulip_balloon_player_name')
     if (savedName) setPlayerName(savedName)
+
+    const savedPersonalScores = localStorage.getItem('tulip_balloon_personal_scores')
+    if (savedPersonalScores) {
+      try {
+        setPersonalScores(JSON.parse(savedPersonalScores))
+      } catch (e) {}
+    }
 
     fetchLeaderboards()
   }, [])
@@ -169,6 +207,8 @@ export function BalloonPopGame() {
   }
 
   const popBalloon = (id: number, spawnTime: number) => {
+    playPopSound() // Trigger audio popup effect immediately
+
     const reactionTime = Date.now() - spawnTime
     let points = 1
     let feedbackText = '+1 Point'
@@ -217,12 +257,14 @@ export function BalloonPopGame() {
   const endGame = async (finalScore: number) => {
     setGameState('gameover')
 
-    const currentList = leaderboards[mode] || []
-    const existingUserEntry = currentList.find((entry) => entry.name.toLowerCase() === (playerName || 'Player').toLowerCase())
-    
+    const currentPersonalBest = personalScores[mode] || 0
     let isPersonalBest = false
-    if (!existingUserEntry || finalScore > existingUserEntry.score) {
+
+    if (finalScore > currentPersonalBest) {
       isPersonalBest = true
+      const updatedPersonalScores = { ...personalScores, [mode]: finalScore }
+      setPersonalScores(updatedPersonalScores)
+      localStorage.setItem('tulip_balloon_personal_scores', JSON.stringify(updatedPersonalScores))
     }
 
     setIsNewRecord(isPersonalBest)
@@ -246,12 +288,6 @@ export function BalloonPopGame() {
     } else {
       confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } })
     }
-  }
-
-  const getTopScoreForMode = (m: GameMode) => {
-    const list = leaderboards[m]
-    if (!list || list.length === 0) return 0
-    return list[0]?.score || 0
   }
 
   return (
@@ -290,7 +326,7 @@ export function BalloonPopGame() {
                 className="rounded-2xl h-12 font-bold text-base gradient-dream text-white shadow-soft hover:opacity-90 capitalize flex justify-between px-6"
               >
                 <span>{MODE_SETTINGS[m].label}</span>
-                <span className="text-xs bg-white/25 px-2.5 py-1 rounded-full">Peak: {getTopScoreForMode(m)} Pts</span>
+                <span className="text-xs bg-white/25 px-2.5 py-1 rounded-full">Personal Peak: {personalScores[m]} Pts</span>
               </Button>
             ))}
           </div>
@@ -381,7 +417,7 @@ export function BalloonPopGame() {
             </p>
             {isNewRecord && (
               <div className="mt-3 inline-block bg-amber-100 text-amber-800 border border-amber-300 px-3 py-1 rounded-full text-xs font-black animate-bounce shadow-sm">
-                🎉 NEW PEAK SCORE RECORD! 🎉
+                🎉 NEW PERSONAL PEAK SCORE RECORD! 🎉
               </div>
             )}
           </div>
