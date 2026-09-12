@@ -1,0 +1,220 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-petal: var(--petal);
+  --color-petal-foreground: var(--petal-foreground);
+  --color-sky: var(--sky);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --animate-sway: sway 4s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pop: pop 0.35s ease-out;
+}
+
+:root {
+  --radius: 1rem;
+  --background: oklch(0.985 0.012 285);
+  --foreground: oklch(0.28 0.07 288);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.07 288);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.28 0.07 288);
+  --primary: oklch(0.52 0.19 292);
+  --primary-foreground: oklch(0.99 0.008 285);
+  --secondary: oklch(0.93 0.045 255);
+  --secondary-foreground: oklch(0.33 0.09 280);
+  --muted: oklch(0.955 0.02 285);
+  --muted-foreground: oklch(0.52 0.045 285);
+  --accent: oklch(0.9 0.06 300);
+  --accent-foreground: oklch(0.32 0.09 292);
+  --destructive: oklch(0.6 0.2 20);
+  --destructive-foreground: oklch(0.99 0.005 285);
+  --petal: oklch(0.84 0.09 320);
+  --petal-foreground: oklch(0.32 0.1 320);
+  --sky: oklch(0.78 0.1 240);
+  --border: oklch(0.9 0.035 288);
+  --input: oklch(0.9 0.035 288);
+  --ring: oklch(0.62 0.16 292);
+  --tulip-purple: oklch(0.68 0.16 305);
+  --tulip-blue: oklch(0.78 0.11 243);
+  --tulip-stem: oklch(0.78 0.09 160);
+  --gradient-dream: linear-gradient(135deg, oklch(0.72 0.13 245), oklch(0.55 0.19 296));
+  --gradient-petal: linear-gradient(135deg, oklch(0.9 0.07 320), oklch(0.85 0.09 275));
+  --gradient-page: radial-gradient(1200px 600px at 10% -10%, oklch(0.9 0.07 255 / 0.55), transparent 60%),
+    radial-gradient(1000px 500px at 90% 0%, oklch(0.88 0.08 305 / 0.5), transparent 60%),
+    radial-gradient(900px 700px at 50% 110%, oklch(0.9 0.06 285 / 0.45), transparent 60%);
+  --shadow-soft: 0 10px 30px -12px oklch(0.5 0.15 292 / 0.35);
+  --shadow-glow: 0 0 0 1px oklch(0.85 0.05 290 / 0.6), 0 18px 45px -18px oklch(0.5 0.18 292 / 0.5);
+  --chart-1: oklch(0.62 0.17 292);
+  --chart-2: oklch(0.7 0.13 245);
+  --chart-3: oklch(0.8 0.1 320);
+  --chart-4: oklch(0.75 0.11 200);
+  --chart-5: oklch(0.68 0.14 270);
+  --sidebar: oklch(0.98 0.015 290);
+  --sidebar-foreground: oklch(0.28 0.07 288);
+  --sidebar-primary: oklch(0.52 0.19 292);
+  --sidebar-primary-foreground: oklch(0.99 0.008 285);
+  --sidebar-accent: oklch(0.93 0.045 255);
+  --sidebar-accent-foreground: oklch(0.33 0.09 280);
+  --sidebar-border: oklch(0.9 0.035 288);
+  --sidebar-ring: oklch(0.62 0.16 292);
+}
+
+.dark {
+  --background: oklch(0.19 0.045 285);
+  --foreground: oklch(0.96 0.012 285);
+  --card: oklch(0.24 0.05 288);
+  --card-foreground: oklch(0.96 0.012 285);
+  --popover: oklch(0.24 0.05 288);
+  --popover-foreground: oklch(0.96 0.012 285);
+  --primary: oklch(0.72 0.15 295);
+  --primary-foreground: oklch(0.18 0.05 288);
+  --secondary: oklch(0.32 0.06 265);
+  --secondary-foreground: oklch(0.96 0.012 285);
+  --muted: oklch(0.3 0.05 285);
+  --muted-foreground: oklch(0.75 0.03 285);
+  --accent: oklch(0.36 0.08 300);
+  --accent-foreground: oklch(0.96 0.012 285);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.72 0.15 295);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    background-image: var(--gradient-page);
+    background-attachment: fixed;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+@utility gradient-dream {
+  background-image: var(--gradient-dream);
+}
+
+@utility gradient-petal {
+  background-image: var(--gradient-petal);
+}
+
+@utility text-gradient {
+  background-image: var(--gradient-dream);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility card-cute {
+  background-color: color-mix(in oklab, var(--card) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in oklab, var(--border) 90%, transparent);
+  border-radius: var(--radius-3xl);
+  box-shadow: var(--shadow-soft);
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  50% { transform: rotate(4deg) translateY(-4px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-14px) rotate(3deg); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+/* Paste the animation code at the bottom of src/styles.css */
+@keyframes balloon-rise {
+  0% {
+    transform: translateY(100vh) scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120vh) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@keyframes bouquet-emerge {
+  0% {
+    transform: scale(0) rotate(-15deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-balloon-rise {
+  animation: balloon-rise linear infinite;
+}
+
+.animate-bouquet-emerge {
+  animation: bouquet-emerge 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
