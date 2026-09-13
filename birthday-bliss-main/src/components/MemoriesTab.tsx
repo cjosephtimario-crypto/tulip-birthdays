@@ -7,7 +7,7 @@ interface Memory {
   id: string
   image_url: string
   caption: string | null
-  memory_date: string | null
+  created_at: string
 }
 
 export function MemoriesTab() {
@@ -47,9 +47,12 @@ export function MemoriesTab() {
 
     setUploading(true)
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('User not authenticated')
+
       const fileExt = file.name.split('.').pop()
       const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
+      const filePath = `${user.id}/${fileName}`
 
       const { error: uploadError } = await supabase.storage
         .from('memories')
@@ -65,6 +68,7 @@ export function MemoriesTab() {
         .from('memories' as any)
         .insert([
           {
+            user_id: user.id,
             image_url: urlData.publicUrl,
             caption: caption.trim() || null,
           },

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../integrations/supabase/client'
 import { Button } from '@/components/ui/button'
-import { Trash2, Plus, Gift, CheckCircle2, Circle } from 'lucide-react'
+import { Trash2, Plus, Gift, CheckCircle2, Circle, Loader2 } from 'lucide-react'
 
 interface WishlistItem {
   id: string
@@ -40,24 +40,31 @@ export function WishlistTab() {
     if (!title.trim()) return
 
     setLoading(true)
-    const { error } = await supabase.from('wishlist_items' as any).insert([
-      {
-        title: title.trim(),
-        price: price ? parseFloat(price) : null,
-        url: url.trim() || null,
-        purchased: false,
-      },
-    ])
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('User not authenticated')
 
-    if (!error) {
+      const { error } = await supabase.from('wishlist_items' as any).insert([
+        {
+          user_id: user.id,
+          title: title.trim(),
+          price: price ? parseFloat(price) : null,
+          url: url.trim() || null,
+          purchased: false,
+        },
+      ])
+
+      if (error) throw error
+
       setTitle('')
       setPrice('')
       setUrl('')
       fetchWishlist()
-    } else {
-      alert(error.message)
+    } catch (err: any) {
+      alert(err.message || 'Error adding item')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const togglePurchased = async (id: string, currentStatus: boolean) => {
@@ -119,7 +126,8 @@ export function WishlistTab() {
           disabled={loading}
           className="w-full md:w-auto px-6 py-2 rounded-xl gradient-dream text-white font-bold shadow-soft"
         >
-          <Plus className="w-4 h-4 mr-2" /> Add Item
+          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
+          Add Item
         </Button>
       </form>
 
